@@ -1,94 +1,36 @@
 import React from 'react';
-import { 
-  Box, 
-  Grid, 
-  Typography 
-} from '@mui/material';
-import { Upload as UploadIcon } from '@mui/icons-material';
+import { Box, Typography, Paper } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
 
-function FileInfo({ fileInfo, darkMode }) {
+const FileInfo = ({ name, startTime, endTime, duration }) => {
+  const formatTime = (unixTime) => {
+    return new Date(unixTime * 1000).toLocaleString();
+  };
+
+  const formatDuration = (seconds) => {
+    const days = Math.floor(seconds / (3600 * 24));
+    const hours = Math.floor((seconds % (3600 * 24)) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = Math.floor(seconds % 60);
+    
+    return `${days}д ${hours}ч ${minutes}м ${secs}с`;
+  };
+
   return (
-    <Box sx={{ 
-      padding: 2, 
-      border: '1px solid', 
-      borderColor: darkMode ? 'divider' : 'divider',
-      borderRadius: 1,
-      height: '100%',
-      backgroundColor: darkMode ? 'background.default' : 'background.paper'
-    }}>
-      <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-        Информация о файле
-      </Typography>
+    <Paper elevation={2} sx={{ p: 2, mt: 2, mb: 2 }}>
+      <Box display="flex" alignItems="center" mb={1}>
+        <InfoIcon color="primary" sx={{ mr: 1 }} />
+        <Typography variant="h6">Информация о файле</Typography>
+      </Box>
       
-      {fileInfo.fileName ? (
-        <Box>
-          {/* Заголовок файла */}
-          <Box sx={{ marginBottom: 2 }}>
-            <Typography variant="body2" color="textSecondary">
-              Файл:
-            </Typography>
-            <Typography variant="body1" fontWeight="medium">
-              {fileInfo.fileName}
-            </Typography>
-          </Box>
-          
-          {/* Информация о времени */}
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={4}>
-              <Box>
-                <Typography variant="body2" color="textSecondary">
-                  Начало:
-                </Typography>
-                <Typography variant="body1">
-                  {fileInfo.startTime}
-                </Typography>
-              </Box>
-            </Grid>
-            
-            <Grid item xs={12} sm={4}>
-              <Box>
-                <Typography variant="body2" color="textSecondary">
-                  Конец:
-                </Typography>
-                <Typography variant="body1">
-                  {fileInfo.endTime}
-                </Typography>
-              </Box>
-            </Grid>
-            
-            <Grid item xs={12} sm={4}>
-              <Box>
-                <Typography variant="body2" color="textSecondary">
-                  Длительность:
-                </Typography>
-                <Typography variant="body1">
-                  {fileInfo.duration}
-                </Typography>
-              </Box>
-            </Grid>
-          </Grid>
-        </Box>
-      ) : (
-        <Box sx={{ 
-          display: 'flex', 
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100%',
-          textAlign: 'center'
-        }}>
-          <UploadIcon sx={{ 
-            fontSize: 48, 
-            color: darkMode ? 'text.disabled' : 'text.disabled', 
-            marginBottom: 1 
-          }} />
-          <Typography variant="body1" color="textSecondary">
-            Загрузите файл для анализа
-          </Typography>
-        </Box>
-      )}
-    </Box>
+      <Box pl={3}>
+        <Typography variant="body1"><strong>Имя файла:</strong> {name}</Typography>
+        <Typography variant="body1"><strong>Начало записи:</strong> {formatTime(startTime)}</Typography>
+        <Typography variant="body1"><strong>Конец записи:</strong> {formatTime(endTime)}</Typography>
+        <Typography variant="body1"><strong>Длительность:</strong> {formatDuration(duration)}</Typography>
+      </Box>
+    </Paper>
   );
-}
+};
 
 export default FileInfo;
